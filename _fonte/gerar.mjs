@@ -12,9 +12,9 @@ const MED = JSON.parse(fs.readFileSync(path.join(AQUI, 'medidas.json'), 'utf8'))
 
 // Checkout Cakto de cada raça (produto "No Tapetinho - <raça>", com os 5 bumps). Vazio: o botão aponta para #checkout-pendente.
 const CHECKOUT = { lulu: 'https://pay.cakto.com.br/4335byt', 'shih-tzu': 'https://pay.cakto.com.br/38uhrzs', salsicha: 'https://pay.cakto.com.br/evzg3t6', yorkshire: 'https://pay.cakto.com.br/bci7s4g' };
-// Rastreio. PENDENTE: id do pixel da oferta (compartilhado com a Conta 01) e a chave do script de visitas do painel
+// Rastreio. PENDENTE: id do pixel da oferta (compartilhado com a Conta 01). painel: chave do script de visitas do painel
 // (instalacao.script do diagnostico-rastreio). Vazio = nada carrega.
-const RASTREIO = { pixel: '', painel: '' };
+const RASTREIO = { pixel: '', painel: '7c65ca17fb0c624457cb6c87d1063a69' };
 
 // largura do celular do hero: quase a tela toda no celular (margem de 18 px de cada lado), 330 px no computador (o botão cabe na primeira tela)
 const SIZES_HERO = '(max-width: 860px) calc(100vw - 36px), 330px';
