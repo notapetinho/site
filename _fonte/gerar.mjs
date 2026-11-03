@@ -4,7 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { racas, texto as T } from './conteudo.mjs';
+import { racas, texto as T, raiz as RZ } from './conteudo.mjs';
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const SITE = path.dirname(AQUI);
@@ -12,15 +12,19 @@ const MED = JSON.parse(fs.readFileSync(path.join(AQUI, 'medidas.json'), 'utf8'))
 
 // Checkout Cakto de cada raça (produto "No Tapetinho - <raça>", com os 5 bumps). Vazio: o botão aponta para #checkout-pendente.
 const CHECKOUT = { lulu: 'https://pay.cakto.com.br/4335byt', 'shih-tzu': 'https://pay.cakto.com.br/38uhrzs', salsicha: 'https://pay.cakto.com.br/evzg3t6', yorkshire: 'https://pay.cakto.com.br/bci7s4g' };
-// Rastreio. PENDENTE: id do pixel da oferta (compartilhado com a Conta 01). painel: chave do script de visitas do painel
+// Rastreio. pixel: o da oferta, compartilhado com a Conta 01 (só PageView no navegador; a compra vai pela CAPI). painel: chave do script de visitas do painel
 // (instalacao.script do diagnostico-rastreio). Vazio = nada carrega.
-const RASTREIO = { pixel: '', painel: '7c65ca17fb0c624457cb6c87d1063a69' };
+const RASTREIO = { pixel: '4621816201469916', painel: '7c65ca17fb0c624457cb6c87d1063a69' };
 
 // largura do celular do hero: quase a tela toda no celular (margem de 18 px de cada lado), 330 px no computador (o botão cabe na primeira tela)
 const SIZES_HERO = '(max-width: 860px) calc(100vw - 36px), 330px';
 const ok = (c, m) => { if (!c) { console.error('ERRO:', m); process.exit(1); } };
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const md = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+const rastreio = (RASTREIO.pixel ? `<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${RASTREIO.pixel}');fbq('track','PageView');</script>
+<noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=${RASTREIO.pixel}&ev=PageView&noscript=1"></noscript>` : '<!-- RASTREIO PENDENTE: pixel da oferta (Meta, compartilhado com a Conta 01). Preencher RASTREIO.pixel em _fonte/gerar.mjs. -->')
+    + '\n' + (RASTREIO.painel ? `<script async src="https://painel.labofertas.com/api/lp/script?k=${RASTREIO.painel}"></script>` : '<!-- RASTREIO PENDENTE: script de visitas do painel labofertas. Preencher RASTREIO.painel em _fonte/gerar.mjs. -->');
 
 function pagina(id) {
   const r = racas[id];
@@ -37,9 +41,6 @@ function pagina(id) {
   const sec3 = (cls, a, midia, b, inverte) => `<section class="${cls}"><div class="wrap tri${inverte ? ' inv' : ''}"><div class="ta">${a}</div><div class="tm">${midia}</div><div class="tb">${b}</div></div></section>`;
   const sec = (cls, corpo, midia, inverte) => `<section class="${cls}"><div class="wrap grade${inverte ? ' inv' : ''}"><div class="texto">${corpo}</div><div class="midia">${midia}</div></div></section>`;
 
-  const rastreio = (RASTREIO.pixel ? `<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${RASTREIO.pixel}');fbq('track','PageView');</script>
-<noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=${RASTREIO.pixel}&ev=PageView&noscript=1"></noscript>` : '<!-- RASTREIO PENDENTE: pixel da oferta (Meta, compartilhado com a Conta 01). Preencher RASTREIO.pixel em _fonte/gerar.mjs. -->')
-    + '\n' + (RASTREIO.painel ? `<script async src="https://painel.labofertas.com/api/lp/script?k=${RASTREIO.painel}"></script>` : '<!-- RASTREIO PENDENTE: script de visitas do painel labofertas. Preencher RASTREIO.painel em _fonte/gerar.mjs. -->');
 
   const html = `<!doctype html>
 <html lang="pt-BR">
@@ -158,7 +159,67 @@ const simples = (titulo, corpo, raiz) => `<!doctype html>
 <main><section><div class="wrap estreito simples">${corpo}</div></section></main>
 <footer><div class="wrap"><p><strong>No Tapetinho</strong> · <a href="mailto:contato@notapetinho.com">contato@notapetinho.com</a></p></div></footer></body></html>
 `;
-fs.writeFileSync(path.join(SITE, 'index.html'), simples('No Tapetinho', `<h1>No Tapetinho</h1><ul class="escolha">${Object.entries(racas).map(([id, r]) => `<li><a href="${id}/"><img src="img/${id}/hero-celular-720.webp" width="120" height="${Math.round(120 * MED[id]['hero-celular'][1] / MED[id]['hero-celular'][0])}" alt="" loading="lazy">${esc(r.R)}</a></li>`).join('')}</ul>`, ''));
+// a raiz: destino da bio (marca.md). Os cartões levam a origem "bio" para o painel separar de anúncio.
+const ICONES_APP = JSON.parse(fs.readFileSync(path.join(SITE, '..', 'app', '_fonte', 'icones-ui.json'), 'utf8')).svg;
+const svgApp = n => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONES_APP[n]}</svg>`;
+const BIO = '?utm_source=bio&utm_medium=raiz';
+const URL_SITE = 'https://notapetinho.com/';
+fs.writeFileSync(path.join(SITE, 'index.html'), `<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${esc(RZ.titulo)}</title>
+<meta name="description" content="${esc(RZ.descricao)}">
+<link rel="canonical" href="${URL_SITE}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="${URL_SITE}">
+<meta property="og:site_name" content="No Tapetinho">
+<meta property="og:title" content="${esc(RZ.titulo)}">
+<meta property="og:description" content="${esc(RZ.descricao)}">
+<meta property="og:image" content="${URL_SITE}img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Lulu, Shih Tzu, Salsicha e Yorkshire sentados num tapetinho, com a frase Adestramento em casa, 3 minutos por dia.">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+${rastreio}
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body class="raiz">
+<header class="barra"><div class="wrap"><img src="img/icone-64.png" width="28" height="28" alt=""><span>No Tapetinho</span></div></header>
+<main>
+<section class="rz-topo"><div class="wrap estreito">
+ <span class="chapeu">${esc(RZ.chapeu)}</span>
+ <h1>${esc(RZ.h1)}</h1>
+ <p class="sub">${esc(RZ.sub)}</p>
+ <ul class="rz-linhas">${RZ.linhas.map(([ic, l]) => `<li><span class="rz-ic">${svgApp(ic)}</span><span>${md(l)}</span></li>`).join('')}</ul>
+</div></section>
+<section class="rz-racas"><div class="wrap estreito">
+ <h2>${esc(RZ.h2)}</h2>
+ <p class="rz-linha">${esc(RZ.linhaRaca)}</p>
+ <ul class="rz-cartoes">${RZ.cartoes.map(([id, nome, cta]) => `<li><a href="${id}/${BIO}"><img src="img/racas/${id}-senta.webp" width="150" height="150" alt="Ilustração do ${esc(nome)} sentado, com a mão segurando o petisco" decoding="async"><strong>${esc(nome)}</strong><span class="rz-cta">${esc(cta)}</span></a></li>`).join('')}</ul>
+</div></section>
+<section class="rz-outra"><div class="wrap estreito">
+ <h3>${esc(RZ.h3)}</h3>
+ <p>${esc(RZ.outra).replace('contato@notapetinho.com', '<a href="mailto:contato@notapetinho.com">contato@notapetinho.com</a>')}</p>
+</div></section>
+</main>
+<footer><div class="wrap">
+ <p><strong>No Tapetinho</strong> · <a href="mailto:contato@notapetinho.com">contato@notapetinho.com</a> · <a href="privacidade/">Privacidade</a> · <a href="termos/">Termos</a></p>
+ <p class="aviso">${esc(RZ.aviso)}</p>
+</div></footer>
+</body>
+</html>
+`);
+ok(RZ.cartoes.every(([id]) => fs.existsSync(path.join(SITE, 'img', 'racas', id + '-senta.webp'))), 'ilustração dos cartões da raiz (rode _fonte/recortar.py)');
+ok(fs.existsSync(path.join(SITE, 'img', 'og.jpg')), 'og.jpg da raiz (rode _fonte/marca.mjs)');
+ok(!/\u2014/.test(fs.readFileSync(path.join(SITE, 'index.html'), 'utf8')), 'sem travessão na raiz');
 fs.mkdirSync(path.join(SITE, 'privacidade'), { recursive: true });
 fs.mkdirSync(path.join(SITE, 'termos'), { recursive: true });
 fs.writeFileSync(path.join(SITE, 'privacidade', 'index.html'), simples('Privacidade · No Tapetinho', fs.readFileSync(path.join(AQUI, 'privacidade.html'), 'utf8'), '../'));

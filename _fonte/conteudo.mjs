@@ -135,3 +135,21 @@ export const texto = {
   },
   rodape: { marca: 'No Tapetinho', email: 'contato@notapetinho.com' }
 };
+
+// a raiz notapetinho.com, destino da bio do Instagram e do Facebook: texto literal do marca.md (2026-11-03), sem foco em raça e sem preço
+export const raiz = {
+  titulo: 'No Tapetinho: adestramento em casa, pelo celular',
+  descricao: 'App de adestramento para fazer em casa, feito para a raça do seu cachorro: treino de 3 minutos por dia, plano de 21 dias, sem gritar e sem castigo.',
+  chapeu: 'Adestramento em casa, pelo celular',
+  h1: 'Seu cachorro faz xixi pela casa? O app mostra o que fazer hoje, em 3 minutos.',
+  sub: 'Um app de adestramento feito para a raça do seu cachorro. Você abre, faz o treino do dia e marca feito. Sem gritar e sem castigo.',
+  // ícones da própria interface do app, na ordem do marca.md: relógio, calendário, gota
+  linhas: [['relogio', '**3 minutos por dia**, com o relógio na tela'], ['plano', '**Plano de 21 dias**, com o xixi treinado desde o dia 1'], ['gota', '**Paga uma vez**, sem mensalidade']],
+  h2: 'Escolha a raça do seu cachorro',
+  linhaRaca: 'Cada app tem o treino, os comandos e os cuidados da raça.',
+  // ordem de lançamento; cartões iguais
+  cartoes: [['lulu', 'Lulu da Pomerânia', 'Ver o app do Lulu'], ['shih-tzu', 'Shih Tzu', 'Ver o app do Shih Tzu'], ['salsicha', 'Salsicha', 'Ver o app do Salsicha'], ['yorkshire', 'Yorkshire', 'Ver o app do Yorkshire']],
+  h3: 'Minha raça não está aqui',
+  outra: 'Por enquanto, o app existe para estas quatro raças. Quer o da sua? Mande o nome da raça para contato@notapetinho.com. Os pedidos ajudam a escolher as próximas.',
+  aviso: 'Material educativo. Não substitui o veterinário.'
+};
