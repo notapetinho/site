@@ -14,11 +14,11 @@ const APP = 'http://127.0.0.1:5180/';
 
 // cão de exemplo de cada raça (pagina.md, "O que muda por raça") e a pasta de acesso do app
 const RACAS = {
-  // foto do Thor (decisão de 2026-11-03): só no Lulu; as outras raças ficam com a ilustração no avatar
+  // foto real no avatar de cada exemplo (fotos do Vini, uso liberado por ele em 2026-11-03), recortada no rosto com as orelhas inteiras
   lulu: { pasta: 'lulu-q7m2xa', nome: 'Thor', sexo: 'm', nota7: { tela: 'senta' }, foto: 'foto-thor-avatar.jpg' },
-  'shih-tzu': { pasta: 'shih-tzu-x4k9pe', nome: 'Mel', sexo: 'f', nota7: { tela: 'raca', item: 2 } },
-  salsicha: { pasta: 'salsicha-b8r3wd', nome: 'Bidu', sexo: 'm', nota7: { tela: 'raca', item: 1 } },
-  yorkshire: { pasta: 'yorkshire-h5t6nc', nome: 'Nina', sexo: 'f', nota7: { tela: 'senta' } }
+  'shih-tzu': { pasta: 'shih-tzu-x4k9pe', nome: 'Mel', sexo: 'f', nota7: { tela: 'raca', item: 2 }, foto: 'foto-shih-tzu-avatar.jpg' },
+  salsicha: { pasta: 'salsicha-b8r3wd', nome: 'Bidu', sexo: 'm', nota7: { tela: 'raca', item: 1 }, foto: 'foto-salsicha-avatar.jpg' },
+  yorkshire: { pasta: 'yorkshire-h5t6nc', nome: 'Nina', sexo: 'f', nota7: { tela: 'senta' }, foto: 'foto-yorkshire-avatar.jpg' }
 };
 // --so=hero,diario,ficha,... refaz só essas capturas, sem apagar as outras (partes: hero diario comandos nota casos kit ficha videos)
 const SO = (process.argv.find(a => a.startsWith('--so=')) || '').slice(5).split(',').filter(Boolean);
@@ -42,7 +42,7 @@ function semanaDeXixi() {
   return x.filter(i => i.t < Date.now()).sort((a, b) => a.t - b.t);
 }
 // a foto vai como o app guarda depois do campo da ficha: JPEG quadrado de 320 px em data URL (o enquadramento já vem
-// centrado no rosto em foto-thor-avatar.jpg, feito a partir de foto-thor.png)
+// centrado no rosto em foto-<raça>-avatar.jpg, feito a partir da foto original da mesma pasta)
 const fotoDe = r => RACAS[r].foto ? 'data:image/jpeg;base64,' + fs.readFileSync(path.join(AQUI, RACAS[r].foto)).toString('base64') : '';
 const base = r => ({ nome: RACAS[r].nome, foto: fotoDe(r), sexo: RACAS[r].sexo, checagem: {}, familia: { regras: {}, quem: {} }, filhote: { social: [], vet: [] }, favs: [] });
 const ESTADOS = {
@@ -55,7 +55,8 @@ const ESTADOS = {
 };
 
 const navegador = await chromium.launch({ headless: true, args: ['--mute-audio'] });
-const CSS = '.inst,.toast{display:none!important}*{animation:none!important;transition:none!important}html{scroll-behavior:auto!important}';
+// fora das capturas: o convite de instalar (faixa e linha do Hoje) e os avisos
+const CSS = '.inst,.faixa-inst,.lin[data-a="instalar"],.toast{display:none!important}*{animation:none!important;transition:none!important}html{scroll-behavior:auto!important}';
 
 async function contexto(r, estado, video, dsf = 2, vp = { width: 390, height: 844 }) {
   // gravação: o vídeo do Playwright sai no tamanho CSS da tela; para sair nítido, a tela tem 780x1688 e o app é ampliado 2x (zoom),
