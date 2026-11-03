@@ -209,7 +209,7 @@ for (const [pasta, telas] of Object.entries(POSTS)) {
     await p.setContent(html, { waitUntil: 'networkidle' });
     await p.evaluate(async () => { await document.fonts.load('900 40px Nunito'); await document.fonts.load('700 40px Nunito'); });
     if (!(await p.evaluate(() => document.fonts.check('900 40px Nunito')))) throw new Error('Nunito não carregou');
-    if (await p.evaluate(() => document.documentElement.outerHTML.includes('—'))) throw new Error('travessão em ' + pasta);
+    if (await p.evaluate(() => document.documentElement.outerHTML.includes('\u2014'))) throw new Error('travessão em ' + pasta);
     await p.screenshot({ path: path.join(dir, `${String(i + 1).padStart(2, '0')}.png`) });
   }
   console.log('ok', pasta, telas.length);
