@@ -1,0 +1,154 @@
+{
+ "lulu": {
+  "casos": [
+   756,
+   802
+  ],
+  "diario": [
+   756,
+   990
+  ],
+  "comandos": [
+   756,
+   1723
+  ],
+  "nota-raca": [
+   756,
+   340
+  ],
+  "kit": [
+   756,
+   1548
+  ],
+  "ficha": [
+   756,
+   773
+  ],
+  "hero-celular": [
+   1080,
+   2249
+  ],
+  "video-dia-capa": [
+   540,
+   1168
+  ],
+  "video-agora-capa": [
+   540,
+   1168
+  ]
+ },
+ "salsicha": {
+  "casos": [
+   756,
+   802
+  ],
+  "diario": [
+   756,
+   990
+  ],
+  "comandos": [
+   756,
+   1723
+  ],
+  "nota-raca": [
+   756,
+   379
+  ],
+  "kit": [
+   756,
+   1599
+  ],
+  "ficha": [
+   756,
+   773
+  ],
+  "hero-celular": [
+   1080,
+   2249
+  ],
+  "video-dia-capa": [
+   540,
+   1168
+  ],
+  "video-agora-capa": [
+   540,
+   1168
+  ]
+ },
+ "shih-tzu": {
+  "casos": [
+   756,
+   802
+  ],
+  "diario": [
+   756,
+   990
+  ],
+  "comandos": [
+   756,
+   1723
+  ],
+  "nota-raca": [
+   756,
+   379
+  ],
+  "kit": [
+   756,
+   1548
+  ],
+  "ficha": [
+   756,
+   773
+  ],
+  "hero-celular": [
+   1080,
+   2249
+  ],
+  "video-dia-capa": [
+   540,
+   1168
+  ],
+  "video-agora-capa": [
+   540,
+   1168
+  ]
+ },
+ "yorkshire": {
+  "casos": [
+   756,
+   802
+  ],
+  "diario": [
+   756,
+   990
+  ],
+  "comandos": [
+   756,
+   1723
+  ],
+  "nota-raca": [
+   756,
+   340
+  ],
+  "kit": [
+   756,
+   1548
+  ],
+  "ficha": [
+   756,
+   773
+  ],
+  "hero-celular": [
+   1080,
+   2249
+  ],
+  "video-dia-capa": [
+   540,
+   1168
+  ],
+  "video-agora-capa": [
+   540,
+   1168
+  ]
+ }
+}
